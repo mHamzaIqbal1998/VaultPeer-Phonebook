@@ -136,8 +136,7 @@ wss.on('connection', (ws) => {
 
         room.forEach((peer) => {
           if (peer !== ws && peer.readyState === peer.OPEN) {
-            // Forward the exact raw payload string
-            peer.send(raw);
+            peer.send(JSON.stringify(msg));
             forwarded++;
           }
         });

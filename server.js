@@ -77,6 +77,7 @@ wss.on('connection', (ws) => {
 
     switch (type) {
       case 'pong':
+        console.log(`[${ts()}]   ✔  [PONG] Client ${clientId} sent pong`);
         ws.isAlive = true;
         return;
 
@@ -118,7 +119,28 @@ wss.on('connection', (ws) => {
 
         break;
       }
+      // ── LEAVE ────────────────────────────────────────────────────────────
+      case 'leave': {
+        const currentRoomId = ws._roomId;
+        if (!currentRoomId) {
+          console.log(`[${ts()}]   ⚠  [LEAVE ERROR] Client ${clientId} sent leave before joining a room`);
+          ws.send(JSON.stringify({ type: 'error', message: 'You must join a room first' }));
+          return;
+        }
 
+        console.log(`\n[${ts()}] ┌─ [LEAVE] Client ${clientId} leaving room "${currentRoomId}"`);
+
+        removeClientFromRoom(ws);
+
+        // Acknowledge the leave
+        ws.send(JSON.stringify({
+          type: 'left',
+          roomId: currentRoomId,
+          clientId,
+        }));
+
+        break;
+      }
       // ── ALL OTHER MESSAGES (FORWARD) ────────────────────────────────────
       default: {
         const currentRoomId = ws._roomId;
@@ -180,8 +202,26 @@ function removeClientFromRoom(ws) {
 
   if (!room) return;
 
+  const clientId = ws._clientId;
+  let notified = 0;
+
+  // Notify other peers in the room before we remove this client
+  room.forEach((peer) => {
+    if (peer !== ws && peer.readyState === peer.OPEN) {
+      peer.send(JSON.stringify({
+        type: 'peer_left',
+        roomId,
+        clientId,
+      }));
+      notified++;
+    }
+  });
+
   room.delete(ws);
   console.log(`[${ts()}] │  Removed from room "${roomId}" (${room.size} remaining)`);
+  if (notified > 0) {
+    console.log(`[${ts()}] │  Notified ${notified} peer(s) about client leaving`);
+  }
 
   if (room.size === 0) {
     rooms.delete(roomId);

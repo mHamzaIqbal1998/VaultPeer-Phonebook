@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" alt="VaultPeer logo" width="96" height="96" />
+</p>
+
 # VaultPeer Phonebook
 
 > The WebRTC signaling server for VaultPeer — an open-source, privacy-first KeePass-compatible password manager with live multi-device sync over peer-to-peer connections.

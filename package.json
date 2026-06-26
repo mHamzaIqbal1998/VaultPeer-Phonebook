@@ -1,18 +1,37 @@
 {
-  "name": "vault-peer",
+  "name": "vaultpeer-phonebook",
   "version": "1.0.0",
-  "description": "WebRTC signaling server for VaultPeer",
+  "description": "WebRTC signaling server (Phonebook) for VaultPeer peer discovery and room coordination",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mHamzaIqbal1998/VaultPeer-Phonebook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mHamzaIqbal1998/VaultPeer-Phonebook/issues"
+  },
+  "homepage": "https://github.com/mHamzaIqbal1998/VaultPeer-Phonebook#readme",
+  "keywords": [
+    "vaultpeer",
+    "webrtc",
+    "signaling",
+    "password-manager",
+    "kdbx",
+    "p2p",
+    "keepass"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "ws": "^8.20.0"
+    "ws": "^8.21.0"
   }
 }
